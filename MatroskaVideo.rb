@@ -32,7 +32,7 @@ class MatroskaVideo
 	def has_lossless_audio?
 		has_lossless_audio = false
 		@mkv.tracks.each do |mkv|
-			has_lossless_audio = true if mkv.codec_id =~ /{A_TRUEHD,A_DTS,A_PCM\/INT\/LIT}/i
+			has_lossless_audio = true if mkv.codec_id =~ /(?:A_TRUEHD|A_DTS|A_PCM\/INT\/LIT)/i
 		end
 		has_lossless_audio
 	end
@@ -78,7 +78,3 @@ public
 		track
 	end
 end
-
-video = MatroskaVideo.new("/mnt/ladon/Media/Video/Movies/Harry Potter and the Sorcerer's Stone (2001).mkv")
-puts video.has_forced_subs?
-puts (nil || [0,0])[1] != 0
