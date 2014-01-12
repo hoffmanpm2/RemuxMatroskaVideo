@@ -16,25 +16,14 @@ if !input_file.nil? and !input_file.empty?
 		end
 
 		if !video.has_forced_subs?
-			if video.is_high_definition?
-				if video.has_lossless_audio?
-					if video.has_stereo_aac?
-						ffmpeg_opts = "-i \"#{input_file}\" -vcodec copy -acodec copy -acodec copy -map 0:#{video.video_track_num} -map 0:#{video.dolby_track_num} -map 0:#{video.aac_track_num} -f mp4 -o \"#{output_path}/#{output_file}\""
-						ffmpeg_cmd = "#{ffmpeg_binary} #{ffmpeg_opts}"
-						puts "#{ffmpeg_cmd}"
-						#output = Open3.popen3 (ffmpeg_cmd) { |stdin, stdout, stderr| stdout.read }
-					else
-						ffmpeg_opts = "-i \"#{input_file}\" -vcodec copy -acodec copy -acodec copy -map 0:#{video.video_track_num} -map 0:#{video.dolby_track_num} -map 0:#{video.aac_track_num} -f mp4 -o \"#{output_path}/#{output_file}\""
-						ffmpeg_cmd = "#{ffmpeg_binary} #{ffmpeg_opts}"
-						puts "#{ffmpeg_cmd}"
-						#output = Open3.popen3 (ffmpeg_cmd) { |stdin, stdout, stderr| stdout.read }
-					end
-				end
+			if video.has_stereo_aac?
+					ffmpeg_opts = "-i \"#{input_file}\" -vcodec copy -acodec copy -acodec copy -map 0:#{video.video_track_num} -map 0:#{video.dolby_track_num} -map 0:#{video.aac_track_num} -f mp4 \"#{output_path}/#{output_file}\""
+					ffmpeg_cmd = "#{ffmpeg_binary} #{ffmpeg_opts}"
+					output = Open3.popen3 (ffmpeg_cmd) { |stdin, stdout, stderr| stdout.read }
 			else
-				ffmpeg_opts = "-i \"#{input_file}\" -vcodec copy -acodec copy -acodec copy -map 0:#{video.video_track_num} -map 0:#{video.dolby_track_num} -map 0:#{video.aac_track_num} -f mp4 -o \"#{output_path}/#{output_file}\""
-				ffmpeg_cmd = "#{ffmpeg_binary} #{ffmpeg_opts}"
-				puts "#{ffmpeg_cmd}"
-				#output = Open3.popen3 (ffmpeg_cmd) { |stdin, stdout, stderr| stdout.read }
+					ffmpeg_opts = "-i \"#{input_file}\" -vcodec copy -acodec copy -acodec copy -map 0:#{video.video_track_num} -map 0:#{video.dolby_track_num} -map 0:#{video.aac_track_num} -f mp4 \"#{output_path}/#{output_file}\""
+					ffmpeg_cmd = "#{ffmpeg_binary} #{ffmpeg_opts}"
+					#output = Open3.popen3 (ffmpeg_cmd) { |stdin, stdout, stderr| stdout.read }
 			end
 		else
 			puts Pathname.new(input_file).basename.to_s + " has forced subtitles. It cannot be remuxed."
